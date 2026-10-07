@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brixel — 3D-конструктор на телефоне</title>
+<meta name="description" content="Brixel — собирай детализированные 3D-модели из деталей шаг за шагом, коллекционируй редкие конструкторы и зарабатывай кристаллы. Скачать в Google Play и RuStore.">
+<meta name="theme-color" content="#FFF6E3">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Brixel — 3D-конструктор на телефоне">
+<meta property="og:description" content="Собирай 3D-модели шаг за шагом, коллекционируй редкие конструкторы. Google Play и RuStore.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='26' width='52' height='28' rx='6' fill='%23E8453C'/%3E%3Crect x='14' y='16' width='14' height='12' rx='3' fill='%23E8453C'/%3E%3Crect x='36' y='16' width='14' height='12' rx='3' fill='%23E8453C'/%3E%3C/svg%3E">
+<style>
+:root {
+  --bg: #FFF6E3;
+  --ink: #1B2340;
+  --muted: #4A5170;
+  --card: #FFFFFF;
+  --line: #EADFC6;
+  --red: #E8453C;
+  --blue: #2F6FED;
+  --yellow: #FFC531;
+  --green: #2DBE6C;
+  --orange: #FF8A3D;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+header { padding: 20px 0; }
+header .wrap { display: flex; align-items: center; justify-content: space-between; }
+.logo {
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: .06em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo i {
+  width: 30px; height: 22px; background: var(--red); border-radius: 5px; position: relative; display: inline-block;
+}
+.logo i::before, .logo i::after {
+  content: ""; position: absolute; top: -5px; width: 9px; height: 7px; background: var(--red); border-radius: 2px;
+}
+.logo i::before { left: 4px; }
+.logo i::after { right: 4px; }
+.lang { display: flex; gap: 4px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.lang button {
+  border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700;
+  padding: 5px 12px; border-radius: 999px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.hero { padding: 24px 0 56px; }
+.hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+.eyebrow {
+  display: inline-block; font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 14px;
+}
+h1 { font-size: clamp(34px, 5.4vw, 58px); line-height: 1.06; margin: 0 0 18px; font-weight: 900; letter-spacing: -.02em; }
+.lead { font-size: clamp(17px, 2vw, 20px); color: var(--muted); margin: 0 0 28px; max-width: 34em; }
+.stores { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 11px; text-decoration: none; color: #fff; background: #000;
+  padding: 7px 20px 7px 14px; border-radius: 11px; min-height: 56px; min-width: 176px;
+  border: 1.5px solid #A6A6A6; transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0, 0, 0, .25); }
+.btn:active { transform: translateY(0); box-shadow: none; }
+.btn:focus-visible, .lang button:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.btn svg { width: 30px; height: 30px; flex: none; }
+.btn small { display: block; font-size: 10.5px; line-height: 1.1; letter-spacing: .06em; text-transform: uppercase; }
+.btn strong { display: block; font-size: 21px; line-height: 1.1; font-weight: 600; letter-spacing: -.01em; }
+.hero-art { width: 100%; height: auto; max-width: 420px; justify-self: center; overflow: visible; }
+.drop { animation: drop 2.8s cubic-bezier(.5, 0, .3, 1) infinite; }
+@keyframes drop {
+  0% { transform: translateY(-46px); }
+  45% { transform: translateY(0); }
+  60% { transform: translateY(0); }
+  100% { transform: translateY(-46px); }
+}
+.facts { background: var(--ink); color: #fff; }
+.facts .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding-top: 22px; padding-bottom: 22px; text-align: center; }
+.facts b { display: block; font-size: clamp(26px, 4vw, 38px); line-height: 1.1; color: var(--yellow); }
+.facts span { font-size: 14px; opacity: .85; }
+.features { padding: 64px 0 40px; }
+h2 { font-size: clamp(26px, 3.6vw, 38px); line-height: 1.15; margin: 0 0 28px; font-weight: 900; letter-spacing: -.01em; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 20px 24px;
+  border-top: 6px solid var(--c);
+}
+.card h3 { margin: 0 0 8px; font-size: 19px; }
+.card p { margin: 0; color: var(--muted); font-size: 15.5px; }
+.cta { padding: 40px 0 72px; }
+.cta .box {
+  background: var(--blue); color: #fff; border-radius: 28px; padding: clamp(28px, 5vw, 52px); text-align: center;
+}
+.cta h2 { margin-bottom: 10px; }
+.cta p { margin: 0 auto 26px; max-width: 32em; opacity: .92; font-size: 18px; }
+.cta .stores { justify-content: center; }
+footer { border-top: 1px solid var(--line); padding: 24px 0 36px; color: var(--muted); font-size: 14px; }
+@media (max-width: 800px) {
+  .hero .wrap { grid-template-columns: 1fr; gap: 28px; }
+  .hero-art { max-width: 300px; order: -1; }
+  .stores .btn { flex: 1 1 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drop { animation: none; }
+  html { scroll-behavior: auto; }
+  .btn { transition: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="logo"><i aria-hidden="true"></i>BRIXEL</div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow" data-i18n="eyebrow">Конструктор 3D</span>
+        <h1 data-i18n="h1">Собирай 3D-модели из деталей прямо в телефоне</h1>
+        <p class="lead" data-i18n="lead">Brixel возвращает удовольствие от сборки конструктора: без беспорядка, без потерянных деталей и без спешки. Одно касание, одна деталь — и модель растёт на глазах.</p>
+        <div class="stores">
+          <a class="btn" href="https://play.google.com/store/apps/details?id=com.feelnest.brixel" target="_blank" rel="noopener">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 3.5v21a1 1 0 0 0 1.5.86l18-10.5a1 1 0 0 0 0-1.72l-18-10.5A1 1 0 0 0 5 3.5z" fill="#fff"/></svg>
+            <span><small data-i18n="avail">Доступно в</small><strong>Google Play</strong></span>
+          </a>
+          <a class="btn" href="https://apps.rustore.ru/app/com.feelnest.brixel" target="_blank" rel="noopener">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M6 9h16l-1.2 14a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 9z" fill="#fff"/><path d="M10 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+            <span><small data-i18n="avail">Доступно в</small><strong>RuStore</strong></span>
+          </a>
+        </div>
+      </div>
+      <svg class="hero-art" viewBox="0 0 360 320" role="img" aria-label="Стопка деталей конструктора" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="180" cy="308" rx="150" ry="8" fill="#1B2340" opacity=".12"/>
+<g fill="#2F6FED">
+<rect x="42" y="250" width="36" height="12" rx="4"/>
+<rect x="102" y="250" width="36" height="12" rx="4"/>
+<rect x="162" y="250" width="36" height="12" rx="4"/>
+<rect x="30" y="260" width="180" height="40" rx="6"/>
+</g>
+<rect x="30" y="292" width="180" height="8" rx="4" fill="#000" opacity=".16"/>
+<rect x="36" y="264" width="168" height="4" rx="2" fill="#fff" opacity=".28"/>
+<g fill="#FFC531">
+<rect x="222" y="250" width="36" height="12" rx="4"/>
+<rect x="282" y="250" width="36" height="12" rx="4"/>
+<rect x="210" y="260" width="120" height="40" rx="6"/>
+</g>
+<rect x="210" y="292" width="120" height="8" rx="4" fill="#000" opacity=".16"/>
+<rect x="216" y="264" width="108" height="4" rx="2" fill="#fff" opacity=".28"/>
+<g fill="#2DBE6C">
+<rect x="42" y="210" width="36" height="12" rx="4"/>
+<rect x="102" y="210" width="36" height="12" rx="4"/>
+<rect x="30" y="220" width="120" height="40" rx="6"/>
+</g>
+<rect x="30" y="252" width="120" height="8" rx="4" fill="#000" opacity=".16"/>
+<rect x="36" y="224" width="108" height="4" rx="2" fill="#fff" opacity=".28"/>
+<g fill="#E8453C">
+<rect x="162" y="210" width="36" height="12" rx="4"/>
+<rect x="222" y="210" width="36" height="12" rx="4"/>
+<rect x="282" y="210" width="36" height="12" rx="4"/>
+<rect x="150" y="220" width="180" height="40" rx="6"/>
+</g>
+<rect x="150" y="252" width="180" height="8" rx="4" fill="#000" opacity=".16"/>
+<rect x="156" y="224" width="168" height="4" rx="2" fill="#fff" opacity=".28"/>
+<g fill="#FFC531">
+<rect x="102" y="170" width="36" height="12" rx="4"/>
+<rect x="162" y="170" width="36" height="12" rx="4"/>
+<rect x="90" y="180" width="120" height="40" rx="6"/>
+</g>
+<rect x="90" y="212" width="120" height="8" rx="4" fill="#000" opacity=".16"/>
+<rect x="96" y="184" width="108" height="4" rx="2" fill="#fff" opacity=".28"/>
+<g fill="#2F6FED">
+<rect x="222" y="170" width="36" height="12" rx="4"/>
+<rect x="282" y="170" width="36" height="12" rx="4"/>
+<rect x="210" y="180" width="120" height="40" rx="6"/>
+</g>
+<rect x="210" y="212" width="120" height="8" rx="4" fill="#000" opacity=".16"/>
+<rect x="216" y="184" width="108" height="4" rx="2" fill="#fff" opacity=".28"/>
+<g fill="#FF8A3D">
+<rect x="162" y="130" width="36" height="12" rx="4"/>
+<rect x="222" y="130" width="36" height="12" rx="4"/>
+<rect x="150" y="140" width="120" height="40" rx="6"/>
+</g>
+<rect x="150" y="172" width="120" height="8" rx="4" fill="#000" opacity=".16"/>
+<rect x="156" y="144" width="108" height="4" rx="2" fill="#fff" opacity=".28"/>
+<rect x="150" y="100" width="120" height="40" rx="6" fill="none" stroke="#1B2340" stroke-width="2.5" stroke-dasharray="7 6" opacity=".35"/>
+<g class="drop"><g fill="#2F6FED">
+<rect x="162" y="90" width="36" height="12" rx="4"/>
+<rect x="222" y="90" width="36" height="12" rx="4"/>
+<rect x="150" y="100" width="120" height="40" rx="6"/>
+</g>
+<rect x="150" y="132" width="120" height="8" rx="4" fill="#000" opacity=".16"/>
+<rect x="156" y="104" width="108" height="4" rx="2" fill="#fff" opacity=".28"/></g>
+</svg>
+    </div>
+  </section>
+
+  <section class="facts" aria-label="Brixel в цифрах">
+    <div class="wrap">
+      <div><b>10+</b><span data-i18n="f1">3D-моделей</span></div>
+      <div><b>4</b><span data-i18n="f2">уровня редкости</span></div>
+      <div><b>0</b><span data-i18n="f3">потерянных деталей</span></div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="wrap">
+      <h2 data-i18n="h2">Чистая радость сборки</h2>
+      <div class="grid">
+        <article class="card" style="--c: var(--red)">
+          <h3 data-i18n="c1t">Шаг за шагом</h3>
+          <p data-i18n="c1p">Подсказки на экране показывают, какая деталь идёт следующей. Найди её, коснись — и она встанет на место.</p>
+        </article>
+        <article class="card" style="--c: var(--yellow)">
+          <h3 data-i18n="c2t">Редкие конструкторы</h3>
+          <p data-i18n="c2p">Обычные, редкие, эпические и легендарные наборы: от мини-робота до корабля «Барракуда».</p>
+        </article>
+        <article class="card" style="--c: var(--green)">
+          <h3 data-i18n="c3t">Кристаллы за сборку</h3>
+          <p data-i18n="c3p">Собирай модели, получай кристаллы и открывай новые наборы для своей коллекции.</p>
+        </article>
+        <article class="card" style="--c: var(--blue)">
+          <h3 data-i18n="c4t">Без спешки и без интернета</h3>
+          <p data-i18n="c4p">Никаких таймеров. Играй офлайн в своём темпе — дома, в дороге, где угодно.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <div class="box">
+        <h2 data-i18n="ctaT">Начни свою коллекцию</h2>
+        <p data-i18n="ctaP">Скачай Brixel и собери первую модель за пару минут.</p>
+        <div class="stores">
+          <a class="btn" href="https://play.google.com/store/apps/details?id=com.feelnest.brixel" target="_blank" rel="noopener">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 3.5v21a1 1 0 0 0 1.5.86l18-10.5a1 1 0 0 0 0-1.72l-18-10.5A1 1 0 0 0 5 3.5z" fill="#fff"/></svg>
+            <span><small data-i18n="avail">Доступно в</small><strong>Google Play</strong></span>
+          </a>
+          <a class="btn" href="https://apps.rustore.ru/app/com.feelnest.brixel" target="_blank" rel="noopener">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M6 9h16l-1.2 14a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 9z" fill="#fff"/><path d="M10 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+            <span><small data-i18n="avail">Доступно в</small><strong>RuStore</strong></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 feelnest · Brixel</div>
+</footer>
+
+<script>
+(function () {
+  var dict = {
+    en: {
+      title: "Brixel — 3D building blocks on your phone",
+      desc: "Brixel — build detailed 3D models brick by brick, collect rare sets and earn crystals. Get it on Google Play and RuStore.",
+      eyebrow: "3D construction game",
+      h1: "Build 3D models from bricks right on your phone",
+      lead: "Brixel brings back the joy of assembling a construction set: no mess, no lost pieces, no rush. One tap, one brick — and the model grows before your eyes.",
+      avail: "Get it on",
+      f1: "3D models",
+      f2: "rarity tiers",
+      f3: "lost bricks",
+      h2: "Pure building joy",
+      c1t: "Step by step",
+      c1p: "On-screen hints show which brick goes next. Find it, tap it, and it snaps into place.",
+      c2t: "Rare sets to collect",
+      c2p: "Common, rare, epic and legendary sets: from a mini robot to the Barracuda ship.",
+      c3t: "Crystals for building",
+      c3p: "Finish models, earn crystals and unlock new sets for your collection.",
+      c4t: "No rush, no internet",
+      c4p: "No timers. Play offline at your own pace — at home, on the road, anywhere.",
+      ctaT: "Start your collection",
+      ctaP: "Download Brixel and finish your first model in a couple of minutes."
+    }
+  };
+  var ru = {};
+  var nodes = document.querySelectorAll("[data-i18n]");
+  nodes.forEach(function (n) { ru[n.getAttribute("data-i18n")] = n.textContent; });
+  ru.title = document.title;
+  ru.desc = document.querySelector('meta[name="description"]').getAttribute("content");
+  dict.ru = ru;
+  function apply(lang) {
+    var d = dict[lang];
+    document.documentElement.lang = lang;
+    document.title = d.title;
+    document.querySelector('meta[name="description"]').setAttribute("content", d.desc);
+    nodes.forEach(function (n) {
+      n.textContent = d[n.getAttribute("data-i18n")];
+    });
+    document.querySelectorAll("[data-lang]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
+    });
+  }
+  document.querySelectorAll("[data-lang]").forEach(function (b) {
+    b.addEventListener("click", function () { apply(b.getAttribute("data-lang")); });
+  });
+  var nav = (navigator.language || "ru").toLowerCase();
+  if (nav.indexOf("ru") !== 0 && nav.indexOf("uk") !== 0 && nav.indexOf("be") !== 0 && nav.indexOf("kk") !== 0) {
+    apply("en");
+  }
+})();
+</script>
+</body>
+</html>
